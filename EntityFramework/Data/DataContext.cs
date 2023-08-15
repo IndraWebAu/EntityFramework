@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EntityFramework.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EntityFramework.Data;
-    public class DataContext : DbContext
-    {
-        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
-    }
+public class DataContext : DbContext
+{
+    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+    public DbSet<Character> Characters { get; set; }
+    public DbSet<Backpack> Backpacks { get; set; }
+}
 

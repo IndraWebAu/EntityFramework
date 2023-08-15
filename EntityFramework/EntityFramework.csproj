@@ -16,4 +16,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://json.schemastore.org/bigquery-table.json" /></VisualStudio></ProjectExtensions>
+
 </Project>
