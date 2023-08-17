@@ -73,12 +73,20 @@ public class CharacterService : ICharacterService
                         .Include(c => c.Factions)
                         .ToListAsync();
     }
+
+    public async Task<List<Character>> GetCharacters() => 
+                            await _context
+                                    .Characters
+                                        .Include(c => c.Backpack)
+                                        .Include(c => c.Weapons)
+                                        .Include(c => c.Factions)
+                                        .ToListAsync();
 }
 
 
 /* 
  
-This is the service that the API calls to create a Character.
+This is the service that the API calls to Create/Call a Character.
 
 It takes a DTO as the request and populates the EF Model with it.
 

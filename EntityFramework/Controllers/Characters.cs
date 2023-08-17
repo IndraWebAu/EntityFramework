@@ -20,6 +20,13 @@ namespace EntityFramework.Controllers
         public async Task<ActionResult<List<Character>>>
             CreateCharacter(CharaterCreateDto request) =>
                         Ok(await _characterService.CreateCharacter(request));
+
+        [HttpGet]
+        public async Task<ActionResult<List<Character>>>
+            GetCharacters() => 
+                Ok(await _characterService.GetCharacters());
+
+            
     }
 }
 
