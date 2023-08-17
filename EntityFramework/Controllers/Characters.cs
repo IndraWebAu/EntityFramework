@@ -11,10 +11,10 @@ namespace EntityFramework.Controllers
     {
         private readonly ICharacterService _characterService;
 
-        public Characters(ICharacterService characterService)
-        {
-            this._characterService = characterService;
-        }
+
+        // Inject the service that performs the EF work to save the Character
+        public Characters(ICharacterService characterService) =>
+                                this._characterService = characterService;
 
         [HttpPost]
         public async Task<ActionResult<List<Character>>>
@@ -22,3 +22,13 @@ namespace EntityFramework.Controllers
                         Ok(await _characterService.CreateCharacter(request));
     }
 }
+
+/*
+ 
+Inject the Service that does the EF work of saving the Model to the DB.
+
+Pass in a DTO. This will be used to populate the EF DAta Model.
+
+Note the EF work is hidden behind the Service.
+
+ */
