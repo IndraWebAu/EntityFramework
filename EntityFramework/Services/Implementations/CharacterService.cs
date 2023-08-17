@@ -74,9 +74,18 @@ public class CharacterService : ICharacterService
                         .ToListAsync();
     }
 
-    public async Task<List<Character>> GetCharacters() => 
+    public async Task<List<Character>> GetCharacters() =>
                             await _context
                                     .Characters
+                                        .Include(c => c.Backpack)
+                                        .Include(c => c.Weapons)
+                                        .Include(c => c.Factions)
+                                        .ToListAsync();
+
+    public async Task<List<Character>> GetCharacter(int id) =>
+                            await _context
+                                    .Characters
+                                        .Where(c => c.Id == id)
                                         .Include(c => c.Backpack)
                                         .Include(c => c.Weapons)
                                         .Include(c => c.Factions)

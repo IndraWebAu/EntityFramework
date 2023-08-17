@@ -23,10 +23,13 @@ namespace EntityFramework.Controllers
 
         [HttpGet]
         public async Task<ActionResult<List<Character>>>
-            GetCharacters() => 
+            GetCharacters() =>
                 Ok(await _characterService.GetCharacters());
 
-            
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<Character>>>
+            GetCharacter(int id) =>
+                Ok(await _characterService.GetCharacter(id));
     }
 }
 

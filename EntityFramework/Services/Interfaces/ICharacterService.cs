@@ -7,5 +7,6 @@ namespace EntityFramework.Services.Interfaces;
     {
     Task<List<Character>> CreateCharacter(CharaterCreateDto request);
     Task<List<Character>> GetCharacters();
+    Task<List<Character>> GetCharacter(int id);
 }
 
