@@ -82,14 +82,48 @@ public class CharacterService : ICharacterService
                                         .Include(c => c.Factions)
                                         .ToListAsync();
 
-    public async Task<List<Character>> GetCharacter(int id) =>
-                            await _context
-                                    .Characters
-                                        .Where(c => c.Id == id)
-                                        .Include(c => c.Backpack)
-                                        .Include(c => c.Weapons)
-                                        .Include(c => c.Factions)
-                                        .ToListAsync();
+    public async Task<List<Character>> GetCharacter(int id)
+    {
+        var character = await _context
+                          .Characters.FindAsync(id);
+
+        if (character == null) throw new Exception("Character does not exist");
+
+        return await _context
+                          .Characters
+                              .Where(c => c.Id == id)
+                              .Include(c => c.Backpack)
+                              .Include(c => c.Weapons)
+                              .Include(c => c.Factions)
+                              .ToListAsync();
+
+    }
+                            
+
+    public async Task<List<Character>> DeleteCharacter(int id)
+    {
+        var character = await _context
+                                .Characters
+                                .Where(c => c.Id == id)
+                                .FirstOrDefaultAsync();
+
+        if (character == null) throw new Exception("Character not found.");
+
+        _context
+            .Characters
+            .Remove(character);
+
+        await _context
+            .SaveChangesAsync();
+
+        return await _context
+                        .Characters
+                            .Where(c => c.Id == id)
+                            .Include(c => c.Backpack)
+                            .Include(c => c.Weapons)
+                            .Include(c => c.Factions)
+                            .ToListAsync();
+    }
 }
 
 

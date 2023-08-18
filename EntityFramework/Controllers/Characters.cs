@@ -27,9 +27,36 @@ namespace EntityFramework.Controllers
                 Ok(await _characterService.GetCharacters());
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<Character>>>
-            GetCharacter(int id) =>
-                Ok(await _characterService.GetCharacter(id));
+        public async Task<ActionResult<List<Character>>> GetCharacter(int id)
+        {
+            try
+            {
+                return Ok(await _characterService.GetCharacter(id));
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteCharacter(int id)
+        {
+            try
+            {
+                return Ok(await _characterService.DeleteCharacter(id));
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
     }
 }
 
