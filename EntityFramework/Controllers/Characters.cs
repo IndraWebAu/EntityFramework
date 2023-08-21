@@ -18,7 +18,7 @@ namespace EntityFramework.Controllers
 
         [HttpPost]
         public async Task<ActionResult<List<Character>>>
-            CreateCharacter(CharaterCreateDto request) =>
+            CreateCharacter(CharacterCreateDto request) =>
                         Ok(await _characterService.CreateCharacter(request));
 
         [HttpGet]
@@ -53,12 +53,25 @@ namespace EntityFramework.Controllers
 
                 return BadRequest(ex.Message);
             }
-
-
         }
 
+        [HttpPut]
+        public async Task<ActionResult> UpdateCharacter(CharacterUpdateDto request)
+        {
+            try
+            {
+                return Ok(await _characterService.UpdateCharacter(request));
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
 }
+
 
 /*
  

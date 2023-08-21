@@ -13,7 +13,7 @@ public class CharacterService : ICharacterService
     {
         this._context = context;
     }
-    public async Task<List<Character>> CreateCharacter(CharaterCreateDto request)
+    public async Task<List<Character>> CreateCharacter(CharacterCreateDto request)
     {
         // This is the EF Model. Populate it with the DTO Request
         var newCharacter = new Character
@@ -98,14 +98,13 @@ public class CharacterService : ICharacterService
                               .ToListAsync();
 
     }
-                            
+
 
     public async Task<List<Character>> DeleteCharacter(int id)
     {
         var character = await _context
                                 .Characters
-                                .Where(c => c.Id == id)
-                                .FirstOrDefaultAsync();
+                                .FindAsync(id);
 
         if (character == null) throw new Exception("Character not found.");
 
@@ -124,6 +123,62 @@ public class CharacterService : ICharacterService
                             .Include(c => c.Factions)
                             .ToListAsync();
     }
+
+    public async Task<List<Character>> UpdateCharacter(CharacterUpdateDto request)
+    {
+        var character = _context
+                               .Characters
+                               .Where(c => c.Id == request.id)
+                               .Include(c => c.Backpack)
+                               .Include(c => c.Weapons)
+                               .Include(c => c.Factions)
+                               .FirstOrDefault();
+
+        if (character == null) throw new Exception("Character not found.");
+
+        character.Name = request.Name;
+
+        character.Backpack.Description = request.Backpack.Description;
+        character.Backpack.Character = character;
+        character.Weapons = GetWeapons(request, character);
+        character.Factions = GetFactions(request, character);
+
+        _context.Characters
+            .Update(character);
+
+        await _context
+            .SaveChangesAsync();
+
+        return await _context
+                        .Characters
+                            .Where(c => c.Id == character.Id)
+                            .Include(c => c.Backpack)
+                            .Include(c => c.Weapons)
+                            .Include(c => c.Factions)
+                            .ToListAsync();
+
+        static List<Weapon>
+            GetWeapons(CharacterUpdateDto request, Character? character) =>
+                                                    request
+                                                        .Weapons
+                                                        .Select(w => new Weapon
+                                                        {
+                                                            Name = w.Name,
+                                                            Character = character
+                                                        })
+                                                        .ToList();
+
+        static List<Faction>
+            GetFactions(CharacterUpdateDto request, Character character) =>
+                                                    request
+                                                    .Factions
+                                                    .Select(f => new Faction
+                                                    {
+                                                        Name = f.Name,
+                                                        Characters = new List<Character> { character }
+                                                    })
+                                                    .ToList();
+    }
 }
 
 
@@ -139,7 +194,7 @@ One Character can have one Backpack
 therefore populate new backpack and assign to Character. Include character in Backpack,
 
 One Character can have many Weapons, therefore query the list of Weapons.
-One Weapon can only have one Owner, therefore assing Character to it.
+One Weapon can only have one Owner, therefore assign Character to it.
 
 One Character can belong to Many Factions, therefore query the list of Factions.
 One Faction can have Many Characters, therefore assing the Character to a List as a List.
